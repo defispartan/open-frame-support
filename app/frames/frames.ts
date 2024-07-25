@@ -19,22 +19,36 @@ export const frames = createFrames({
     farcasterHubContext({
       hubHttpUrl: DEFAULT_DEBUGGER_HUB_URL,
     }),
-    openframes({
-      clientProtocol: {
-        id: "anonymous",
-        version: "1.0.0",
-      },
-      handler: {
-        isValidPayload: (body: JSON) => isLensFrameActionPayload(body),
-        getFrameMessage: async (body: JSON) => {
-          if (!isLensFrameActionPayload(body)) {
-            return undefined;
-          }
-          const result = await getLensFrameMessage(body);
-
-          return { ...result };
+    openframes(
+      {
+        clientProtocol: {
+          id: "anonymous",
+          version: "1.0.0",
+        },
+        handler: {
+          isValidPayload: (body: JSON) => isLensFrameActionPayload(body),
+          getFrameMessage: async (body: JSON) => {
+            return body;
+          },
         },
       },
-    }),
+      {
+        clientProtocol: {
+          id: "lens",
+          version: "1.0.0",
+        },
+        handler: {
+          isValidPayload: (body: JSON) => isLensFrameActionPayload(body),
+          getFrameMessage: async (body: JSON) => {
+            if (!isLensFrameActionPayload(body)) {
+              return undefined;
+            }
+            const result = await getLensFrameMessage(body);
+
+            return { ...result };
+          },
+        },
+      }
+    ),
   ],
 });
