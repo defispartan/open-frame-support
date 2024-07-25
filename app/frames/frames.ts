@@ -21,23 +21,6 @@ export const frames = createFrames({
     }),
     openframes({
       clientProtocol: {
-        id: "lens",
-        version: "1.0.0",
-      },
-      handler: {
-        isValidPayload: (body: JSON) => isLensFrameActionPayload(body),
-        getFrameMessage: async (body: JSON) => {
-          if (!isLensFrameActionPayload(body)) {
-            return undefined;
-          }
-          const result = await getLensFrameMessage(body);
-
-          return { ...result };
-        },
-      },
-    }),
-    openframes({
-      clientProtocol: {
         id: "anonymous",
         version: "1.0.0",
       },
